@@ -38,32 +38,38 @@
 
   <script>
     async function verifyCode() {
-  const code = document.getElementById("codeInput").value.trim();
-  const captchaResponse = document.querySelector("[name='h-captcha-response']").value;
+      const code = document.getElementById("codeInput").value.trim();
+      const captchaResponse = document.querySelector("[name='h-captcha-response']").value;
 
-  if (!code) {
-    document.getElementById("result").innerText = "請輸入代碼";
-    return;
-  }
-  if (!captchaResponse) {
-    document.getElementById("result").innerText = "請先通過驗證";
-    return;
-  }
+      if (!code) {
+        document.getElementById("result").innerText = "請輸入代碼";
+        return;
+      }
+      if (!captchaResponse) {
+        document.getElementById("result").innerText = "請先通過驗證";
+        return;
+      }
 
-  try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbzNWL1C2hhAFcy1FtPPPQdMYZy74EqYNn5nZRPnvzP1o4FCZB0jq-11Irj7_ZEZVCBj/exec?code=" + encodeURIComponent(code));
-    const data = await res.json();
-    if (data.success) {
-      document.getElementById("result").innerText = `${data.message}｜造型：${data.skin}`;
-    } else {
-      document.getElementById("result").innerText = data.message;
+      try {
+        // 使用 GET 請求呼叫 GAS
+        const apiUrl = "https://script.google.com/macros/s/AKfycbzNWL1C2hhAFcy1FtPPPQdMYZy74EqYNn5nZRPnvzP1o4FCZB0jq-11Irj7_ZEZVCBj/exec?code=" 
+                        + encodeURIComponent(code);
+
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        if (data.success) {
+          document.getElementById("result").innerText = `${data.message}｜造型：${data.skin}`;
+        } else {
+          document.getElementById("result").innerText = data.message;
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById("result").innerText = "伺服器錯誤，請稍後再試";
+      }
     }
-  } catch (err) {
-    document.getElementById("result").innerText = "伺服器錯誤，請稍後再試";
-  }
-}
 
-    // 確保按鈕能找到函式
+    // 綁定按鈕事件
     document.getElementById("verifyBtn").addEventListener("click", verifyCode);
   </script>
 </body>
