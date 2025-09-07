@@ -32,7 +32,7 @@
   <h2>正版驗證系統</h2>
   <input type="text" id="codeInput" placeholder="輸入驗證代碼">
   <div class="h-captcha" data-sitekey="4f707a1e-20aa-42b2-b164-5d9ed4fe6580"></div>
-  <button onclick="verifyCode()">查詢</button>
+  <button id="verifyBtn">查詢</button>
 
   <div id="result"></div>
 
@@ -45,29 +45,3 @@
         document.getElementById("result").innerText = "請輸入代碼";
         return;
       }
-      if (!captchaResponse) {
-        document.getElementById("result").innerText = "請先通過驗證";
-        return;
-      }
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbzNWL1C2hhAFcy1FtPPPQdMYZy74EqYNn5nZRPnvzP1o4FCZB0jq-11Irj7_ZEZVCBj/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code })
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          document.getElementById("result").innerText = `${data.message}｜造型：${data.skin}`;
-        } else {
-          document.getElementById("result").innerText = data.message;
-        }
-      } catch (err) {
-        document.getElementById("result").innerText = "伺服器錯誤，請稍後再試";
-      }
-    }
-  </script>
-</body>
-</html>
-
