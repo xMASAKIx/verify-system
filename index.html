@@ -51,9 +51,8 @@
       }
 
       try {
-        // 使用 GET 請求呼叫 GAS
-        const apiUrl = "https://script.google.com/macros/s/AKfycbzNWL1C2hhAFcy1FtPPPQdMYZy74EqYNn5nZRPnvzP1o4FCZB0jq-11Irj7_ZEZVCBj/exec?code=" 
-                        + encodeURIComponent(code);
+        // 改用 Cloudflare Worker API
+        const apiUrl = "https://fujijisa.workers.dev?code=" + encodeURIComponent(code);
 
         const res = await fetch(apiUrl);
         const data = await res.json();
